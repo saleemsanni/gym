@@ -2,12 +2,18 @@ require('dotenv').config()
 
 const express = require('express')
 const mongoose = require('mongoose')
-const path = require('path')
+const cors = require('cors')  // Import cors
 const workoutRoutes = require('./routes/workouts')
 const userRoutes = require('./routes/user')
 
 // express app
 const app = express()
+
+// Apply CORS middleware
+app.use(cors({
+  origin: 'https://gymwork-counter.netlify.app' // Replace with your actual frontend domain
+}));
+
 
 // middleware
 app.use(express.json())
@@ -21,13 +27,14 @@ app.use((req, res, next) => {
 app.use('/api/workouts', workoutRoutes)
 app.use('/api/user', userRoutes)
 
-// Serve static files from the React app
+// Comment out or remove the static file serving code
+/*
 app.use(express.static(path.join(__dirname, 'frontend/build')))
 
-// Serve the React app for any other route
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'))
 })
+*/
 
 // connect to db
 mongoose.connect(process.env.MONGO_URI)
